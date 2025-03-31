@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal | Mind Bridge</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Product+Sans:ital,wght@0,400;0,700;1,400&display=swap');
+        /* Add OpenDyslexic font */
+        @font-face {
+            font-family: 'OpenDyslexic';
+            src: url('https://dyslexicfonts.com/fonts/OpenDyslexic-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Product Sans', sans-serif;
+            transition: color 0.3s, background-color 0.3s;
+        }
+
+        body {
+            overflow-x: hidden;
+            color: white;
+            text-align: center;
+            background-color: black;
+            transition: background-color 0.5s ease;
+            font-size: 16px; /* Base font size */
+        }
+
+        /* High Contrast Mode */
+        body.high-contrast {
+            background-color: black !important;
+            color: white !important;
+        }
+        body.high-contrast .overlay {
+            background-color: rgba(0, 0, 0, 0.9) !important;
+        }
+        body.high-contrast a {
+            color: yellow !important;
+        }
+        body.high-contrast .apply-btn {
+            background-color: yellow !important;
+            color: black !important;
+            border: 2px solid white !important;
+        }
+
+        /* Dyslexia Font Mode */
+        body.dyslexia-mode {
+            font-family: 'OpenDyslexic', sans-serif !important;
+            letter-spacing: 1px;
+            line-height: 1.8;
+        }
+
+        .background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: url(https://images.unsplash.com/photo-1521791055366-0d553872125f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80) no-repeat center center/cover;
+            transition: transform 0.1s ease-out, opacity 0.5s ease;
+            z-index: -2;
+        }
+
+        .overlay {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            transition: background-color 0.5s ease;
+            z-index: -1;
+        }
+
+        /* Accessibility Controls - Horizontal Layout */
+        .accessibility-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 15px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .accessibility-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .accessibility-btn:hover {
+            background: rgba(255, 215, 0, 0.3);
+            border-color: #FFD700;
+        }
+
+        /* Updated Frosted Glass Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: auto;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
+            padding: 8px 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-size: 16px;
+            padding: 10px 15px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 20px;
+        }
+
+        .nav-links a:hover {
+            color: #FFD700;
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .nav-links a.active {
+            color: #FFD700;
+            font-weight: bold;
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        /* Combined border for Job Portal and Resume Builder */
+        .nav-group {
+            display: flex;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .nav-group a {
+            padding: 10px 15px !important;
+            margin: 0 !important;
+            border-radius: 0 !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-group a:last-child {
+            border-right: none;
+        }
+
+        .nav-group a:hover {
+            background-color: rgba(255, 215, 0, 0.1);
+            color: #FFD700;
+        }
+
+        .nav-group a.active {
+            background-color: rgba(255, 215, 0, 0.2);
+            color: #FFD700;
+        }
+
+        /* Adjust spacing between the grouped items */
+        .nav-links > li:not(:last-child) {
+            margin-right: 10px;
+        }
+
+        .hamburger-container, .mobile-nav {
+            display: none;
+        }
+
+        @media (max-width: 1000px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger-container {
+                display: block;
+                position: relative;
+                z-index: 1100;
+                cursor: pointer;
+            }
+
+            .hamburger, .close-icon {
+                width: 32px;
+                height: 32px;
+                fill: white;
+                transition: all 0.3s ease;
+            }
+
+            .close-icon {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+
+            /* Frosted Glass Mobile Nav */
+            .mobile-nav {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 70%;
+                max-width: 300px;
+                height: 100vh;
+                backdrop-filter: blur(15px);
+                background: rgba(0, 0, 0, 0.8);
+                border-right: 1px solid rgba(255, 255, 255, 0.3);
+                padding-top: 80px;
+                transform: translateX(-100%);
+                opacity: 0;
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 1200;
+            }
+
+            .mobile-nav.show {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            .mobile-nav a {
+                font-size: 18px;
+                padding: 18px 25px;
+                text-align: left;
+                color: white;
+                text-decoration: none;
+                display: block;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+                transition: all 0.3s ease;
+            }
+
+            .mobile-nav a:hover {
+                color: #FFD700;
+                background: rgba(255, 215, 0, 0.1);
+                padding-left: 30px;
+            }
+
+            .mobile-nav a.active {
+                color: #FFD700;
+                font-weight: bold;
+                background: rgba(255, 215, 0, 0.1);
+            }
+
+            .mobile-nav .nav-group {
+                flex-direction: column;
+                border: none;
+            }
+
+            .mobile-nav .nav-group a {
+                border-right: none;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1100;
+        }
+
+        .mobile-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .main-content {
+            padding-top: 120px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 50px;
+        }
+
+        .main-content h1 {
+            font-size: 60px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .tagline {
+            font-size: 24px;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .info-section {
+            font-size: 20px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 800px;
+            padding: 0 20px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .cursor {
+            display: inline-block;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+        
+        /* Job Listings Section */
+        .job-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .job-card {
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 30px;
+            border-radius: 15px;
+            width: calc(50% - 20px);
+            text-align: left;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        .job-card h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #FFD700;
+        }
+
+        .job-card .company {
+            font-size: 18px;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .job-card .location {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .job-card .description {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .job-card .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .job-card .tag {
+            background: rgba(255, 215, 0, 0.2);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        /* Updated Button styling */
+        .apply-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #FFD700;
+            color: black;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .apply-btn:hover {
+            background-color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Search Section */
+        .search-section {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px;
+            border-radius: 30px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            color: white;
+            font-size: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search-btn {
+            padding: 0 25px;
+            background-color: #FFD700;
+            color: black;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background-color: white;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .filter-btn {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: rgba(255, 215, 0, 0.3);
+            color: #FFD700;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content h1 {
+                font-size: 40px;
+            }
+            
+            .tagline {
+                font-size: 20px;
+            }
+            
+            .info-section {
+                font-size: 18px;
+            }
+
+            .job-card {
+                width: 100%;
+                padding: 20px;
+            }
+
+            .job-card h2 {
+                font-size: 24px;
+            }
+
+            .job-card .description {
+                font-size: 15px;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .search-btn {
+                padding: 15px;
+            }
+
+            .accessibility-bar {
+                bottom: 100px;
+                left: 50%;
+                transform: translateX(-50%);
+                flex-wrap: wrap;
+                justify-content: center;
+                width: 90%;
+                padding: 8px;
+            }
+            
+            .accessibility-btn {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .accessibility-bar {
+                bottom: 80px;
+                gap: 5px;
+            }
+            
+            .accessibility-btn {
+                padding: 5px 8px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="overlay"></div>
+
+    <!-- Accessibility Controls - Horizontal Layout -->
+    <div class="accessibility-bar">
+        <button class="accessibility-btn" id="contrastBtn">High Contrast</button>
+        <button class="accessibility-btn" id="dyslexiaBtn">Dyslexia Font</button>
+        <button class="accessibility-btn" id="textSizeBtn">Increase Text</button>
+        <button class="accessibility-btn" id="resetBtn">Reset All</button>
+    </div>
+
+    <nav class="navbar">
+        <div class="logo">Mind Bridge.</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="communityhub.html">Community Hub</a></li>
+            <li><a href="sucessstoreis.html">Success Stories</a></li>
+            <li class="nav-group">
+                <a href="jobportal.html" class="active">Job Portal</a>
+                <a href="https://resume-maker-theta-dun.vercel.app/builder" target="_blank">Resume Builder</a>
+            </li>
+            <li><a href="contactus.html">Contact Us</a></li>
+        </ul>
+
+        <div class="hamburger-container" onclick="toggleMenu()">
+            <svg class="hamburger" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M4 6h16M4 12h16m-16 6h16" stroke="white" stroke-width="2"/>
+            </svg>
+
+            <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M6 6L18 18M6 18L18 6" stroke="white" stroke-width="2"/>
+            </svg>
+        </div>
+    </nav>
+
+    <ul class="mobile-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="communityhub.html">Community Hub</a></li>
+        <li><a href="sucessstoreis.html">Success Stories</a></li>
+        <li class="nav-group">
+            <a href="jobportal.html" class="active">Job Portal</a>
+            <a href="https://resume-maker-theta-dun.vercel.app/builder" target="_blank">Resume Builder</a>
+        </li>
+        <li><a href="contactus.html">Contact Us</a></li>
+    </ul>
+
+    <div class="mobile-overlay" onclick="toggleMenu()"></div>
+
+    <div class="main-content">
+        <h1><span id="typing-text"></span></h1>
+        <p class="tagline">Find workplaces that celebrate neurodiversity</p>
+        
+        <div class="info-section">
+            <p>Browse jobs from companies that understand and value neurodiverse talent. Filter by accommodations that match your needs.</p>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search jobs, companies, or skills...">
+                <button class="search-btn">Search</button>
+            </div>
+            <div class="filters">
+                <button class="filter-btn active">All Jobs</button>
+                <button class="filter-btn">Remote</button>
+                <button class="filter-btn">Autism-Friendly</button>
+                <button class="filter-btn">ADHD-Friendly</button>
+                <button class="filter-btn">Dyslexia-Friendly</button>
+            </div>
+        </div>
+        
+        <!-- Job Listings -->
+        <div class="job-container">
+            <div class="job-card">
+                <h2>Software Engineer</h2>
+                <div class="company">Microsoft - Autism Hiring Program</div>
+                <div class="location">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Redmond, WA or Remote
+                </div>
+                <div class="description">
+                    We're looking for autistic software engineers to join our inclusive team. Structured interview process with clear expectations. Quiet workspaces available.
+                </div>
+                <div class="tags">
+                    <span class="tag">Autism-Friendly</span>
+                    <span class="tag">Flexible Hours</span>
+                    <span class="tag">Written Instructions</span>
+                </div>
+                <a href="#" class="apply-btn">Apply Now</a>
+            </div>
+            
+            <div class="job-card">
+                <h2>Data Analyst</h2>
+                <div class="company">EY - Neurodiversity Center of Excellence</div>
+                <div class="location">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    New York, NY or Remote
+                </div>
+                <div class="description">
+                    Seeking detail-oriented individuals for data analysis roles. Alternative interview process available. Mentorship program for new hires.
+                </div>
+                <div class="tags">
+                    <span class="tag">ADHD-Friendly</span>
+                    <span class="tag">Mentorship</span>
+                    <span class="tag">Structured Onboarding</span>
+                </div>
+                <a href="#" class="apply-btn">Apply Now</a>
+            </div>
+            
+            <div class="job-card">
+                <h2>Graphic Designer</h2>
+                <div class="company">Ultranauts</div>
+                <div class="location">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Remote (US Only)
+                </div>
+                <div class="description">
+                    Fully remote team designed for autistic professionals. Flexible schedules, written communication preferred, sensory-friendly virtual workspace.
+                </div>
+                <div class="tags">
+                    <span class="tag">Autism-Friendly</span>
+                    <span class="tag">Remote</span>
+                    <span class="tag">Flexible Schedule</span>
+                </div>
+                <a href="#" class="apply-btn">Apply Now</a>
+            </div>
+            
+            <div class="job-card">
+                <h2>Technical Writer</h2>
+                <div class="company">SAP - Autism at Work</div>
+                <div class="location">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Palo Alto, CA
+                </div>
+                <div class="description">
+                    Create technical documentation in a supportive environment. Option for task demonstrations instead of traditional interviews.
+                </div>
+                <div class="tags">
+                    <span class="tag">Dyslexia-Friendly</span>
+                    <span class="tag">Alternative Interview</span>
+                    <span class="tag">Quiet Workspace</span>
+                </div>
+                <a href="#" class="apply-btn">Apply Now</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navbar functionality
+        function toggleMenu() {
+            document.querySelector('.mobile-nav').classList.toggle('show');
+            document.querySelector('.mobile-overlay').classList.toggle('show');
+            document.querySelector('.hamburger').style.display = 
+                document.querySelector('.mobile-nav').classList.contains('show') ? 'none' : 'block';
+            document.querySelector('.close-icon').style.display = 
+                document.querySelector('.mobile-nav').classList.contains('show') ? 'block' : 'none';
+            
+            // Toggle body scroll when menu is open
+            document.body.style.overflow = 
+                document.querySelector('.mobile-nav').classList.contains('show') ? 'hidden' : 'auto';
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                document.querySelector('.navbar').classList.add('scrolled');
+            } else {
+                document.querySelector('.navbar').classList.remove('scrolled');
+            }
+        });
+
+        // Typing animation
+        document.addEventListener("DOMContentLoaded", function () {
+            const textElement = document.getElementById("typing-text");
+            const text = "Neurodiverse Jobs";
+            let index = 0;
+
+            function typeText() {
+                if (index < text.length) {
+                    textElement.innerHTML = text.substring(0, index + 1) + "<span class='cursor'>|</span>";
+                    index++;
+                    setTimeout(typeText, 100);
+                } else {
+                    document.querySelector(".cursor").style.animation = "blink 1s infinite";
+                }
+            }
+
+            typeText();
+        });
+
+        // Background Wobble Effect
+        document.addEventListener("mousemove", (event) => {
+            let x = (window.innerWidth / 2 - event.pageX) / 50;
+            let y = (window.innerHeight / 2 - event.pageY) / 50;
+            document.querySelector(".background").style.transform = `translate(${x}px, ${y}px)`;
+        });
+
+        // Accessibility Features
+        document.getElementById('contrastBtn').addEventListener('click', function() {
+            document.body.classList.toggle('high-contrast');
+            const overlay = document.querySelector('.overlay');
+            overlay.style.backgroundColor = overlay.style.backgroundColor === 'rgba(0, 0, 0, 0.9)' ? 'rgba(0, 0, 0, 0.6)' : 'rgba(0, 0, 0, 0.9)';
+        });
+
+        document.getElementById('dyslexiaBtn').addEventListener('click', function() {
+            document.body.classList.toggle('dyslexia-mode');
+        });
+
+        document.getElementById('textSizeBtn').addEventListener('click', function() {
+            const currentSize = parseFloat(getComputedStyle(document.body).fontSize);
+            document.body.style.fontSize = (currentSize + 2) + 'px';
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            document.body.classList.remove('high-contrast', 'dyslexia-mode');
+            document.body.style.fontSize = '16px';
+            document.querySelector('.overlay').style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+        });
+
+        // Filter buttons
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

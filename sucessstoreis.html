@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success Stories</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Product+Sans:wght@400;500;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Product Sans', sans-serif;
+        }
+
+        /* Frosted Glass Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: auto;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
+            padding: 8px 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 16px;
+            padding: 10px 15px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 20px;
+        }
+
+        .nav-links a:hover {
+            color: #FFD700;
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .nav-links a.active {
+            color: #FFD700;
+            font-weight: bold;
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .hamburger-container, .mobile-nav {
+            display: none;
+        }
+
+        @media (max-width: 1000px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger-container {
+                display: block;
+                position: relative;
+                z-index: 1100;
+                cursor: pointer;
+            }
+
+            .hamburger, .close-icon {
+                width: 32px;
+                height: 32px;
+                fill: white;
+                transition: all 0.3s ease;
+            }
+
+            .close-icon {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+
+            /* Frosted Glass Mobile Nav */
+            .mobile-nav {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 70%;
+                max-width: 300px;
+                height: 100vh;
+                backdrop-filter: blur(15px);
+                background: rgba(0, 0, 0, 0.8);
+                border-right: 1px solid rgba(255, 255, 255, 0.3);
+                padding-top: 80px;
+                transform: translateX(-100%);
+                opacity: 0;
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 1200;
+            }
+
+            .mobile-nav.show {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            .mobile-nav a {
+                font-size: 18px;
+                padding: 18px 25px;
+                text-align: left;
+                color: white;
+                text-decoration: none;
+                display: block;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+                transition: all 0.3s ease;
+            }
+
+            .mobile-nav a:hover {
+                color: #FFD700;
+                background: rgba(255, 215, 0, 0.1);
+                padding-left: 30px;
+            }
+
+            .mobile-nav a.active {
+                color: #FFD700;
+                font-weight: bold;
+                background: rgba(255, 215, 0, 0.1);
+            }
+        }
+
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1100;
+        }
+
+        .mobile-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Main content styles */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: white;
+            background-color: black;
+        }
+
+        .background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1518655048521-f130df041f66?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+            z-index: -2;
+            transition: transform 0.5s ease-out;
+        }
+
+        .overlay {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        /* DESKTOP LAYOUT */
+        .desktop-layout {
+            display: flex;
+            flex: 1;
+            margin-top: 70px;
+            height: calc(100vh - 70px);
+        }
+        
+        /* Left side - images */
+        .image-column {
+            width: 50%;
+            height: 100%;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            position: relative;
+        }
+        
+        .image-panel {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            scroll-snap-align: start;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .image-panel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.5s ease;
+        }
+
+        .image-panel:hover img {
+            transform: scale(1.03);
+        }
+
+        .image-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+            font-size: 1.2rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .image-panel:hover .image-caption {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Right side - data */
+        .data-column {
+            width: 50%;
+            height: 100%;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+        }
+        
+        .data-panel {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 3rem;
+            scroll-snap-align: start;
+            transition: background 0.3s ease;
+        }
+
+        .data-panel.active {
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        /* MOBILE LAYOUT */
+        .mobile-layout {
+            display: none;
+            flex-direction: column;
+            margin-top: 60px;
+        }
+
+        .mobile-story {
+            width: 100%;
+        }
+
+        .mobile-image-panel {
+            width: 100%;
+            height: 60vh;
+            min-height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mobile-image-panel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .mobile-data-panel {
+            width: 100%;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #FFD700;
+            line-height: 1.3;
+        }
+
+        h2.subtitle {
+            font-size: 1.5rem;
+            color: #aaa;
+            margin-bottom: 0.5rem;
+        }
+
+        h2.condition {
+            font-size: 1.3rem;
+            color: #FFA500;
+            margin-bottom: 1.5rem;
+        }
+        
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #ddd;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Know More button styling */
+        .know-more-btn {
+            margin-top: 25px;
+            padding: 12px 30px;
+            font-size: 16px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: black;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: fit-content;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .know-more-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .know-more-btn:active {
+            transform: translateY(1px);
+        }
+
+        .know-more-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0));
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .know-more-btn:hover::after {
+            transform: translateX(0);
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .indicator-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator-dot.active {
+            background: #FFD700;
+            transform: scale(1.2);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .desktop-layout {
+                display: none;
+            }
+
+            .mobile-layout {
+                display: flex;
+            }
+
+            .scroll-indicator {
+                display: none;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            h2.subtitle {
+                font-size: 1.3rem;
+            }
+
+            h2.condition {
+                font-size: 1.1rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+        }
+
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 1s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .slide-up {
+            animation: slideUp 0.8s ease forwards;
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 215, 0, 0.3);
+            border-radius: 50%;
+            border-top-color: #FFD700;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <div class="background"></div>
+    <div class="overlay"></div>
+
+    <nav class="navbar">
+        <div class="logo">Mind Bridge.</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="communityhub.html">Community Hub</a></li>
+            <li><a href="sucessstoreis.html" class="active">Success Stories</a></li>
+            <li><a href="jobportal.html">Job Portal</a></li>
+            <li><a href="contactus.html">Contact Us</a></li>
+        </ul>
+
+        <div class="hamburger-container" onclick="toggleMenu()">
+            <svg class="hamburger" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M4 6h16M4 12h16m-16 6h16" stroke="white" stroke-width="2"/>
+            </svg>
+
+            <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M6 6L18 18M6 18L18 6" stroke="white" stroke-width="2"/>
+            </svg>
+        </div>
+    </nav>
+
+    <ul class="mobile-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="communityhub.html">Community Hub</a></li>
+        <li><a href="sucessstoreis.html" class="active">Success Stories</a></li>
+        <li><a href="jobportal.html">Job Portal</a></li>
+        <li><a href="contactus.html">Contact Us</a></li>
+    </ul>
+
+    <div class="mobile-overlay" onclick="toggleMenu()"></div>
+
+    <!-- DESKTOP LAYOUT -->
+    <div class="desktop-layout">
+        <!-- Left Column - Images -->
+        <div class="image-column" id="imageColumn">
+            <div class="image-panel">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/BarbaraCorcoran2023.jpg/1280px-BarbaraCorcoran2023.jpg" alt="Barbara Corcoran">
+                <div class="image-caption">Barbara Corcoran - Dyslexia</div>
+            </div>
+            <div class="image-panel">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c4/Ingvar_Kamprad_Haparanda_June_2010.jpg" alt="Ingvar Kamprad">
+                <div class="image-caption">Ingvar Kamprad - ADHD & Dyslexia</div>
+            </div>
+            <div class="image-panel">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/7f/Emma_Watson_2013.jpg" alt="Emma Watson">
+                <div class="image-caption">Emma Watson - ADHD</div>
+            </div>
+        </div>
+        
+        <!-- Right Column - Data -->
+        <div class="data-column" id="dataColumn">
+            <div class="data-panel">
+                <h2 class="slide-up">Barbara Corcoran</h2>
+                <h2 class="subtitle slide-up">- Founder of the Corcoran Group</h2>
+                <h2 class="subtitle slide-up">- Shark Tank Investor</h2>
+                <h2 class="condition slide-up">- Dyslexia</h2>
+                <br>
+                <p class="fade-in">We have witnessed her crack great business deals, read her books, watched her interviews and more. But having achieved so much, Corcoran still worries that her dyslexia might make her appear "less smart".</p>
+                <p class="fade-in">Corcoran flunked in school due to dyslexia and had to transfer, only realizing that she was dyslexic when her son was diagnosed. Despite this, she turned a $1000 loan into a $66 million business, using her creative mind to a business advantage.</p>
+                <button class="know-more-btn slide-up" onclick="window.open('https://en.wikipedia.org/wiki/Barbara_Corcoran', '_blank')">Know More</button>
+            </div>
+            <div class="data-panel">
+                <h2 class="slide-up">Ingvar Kamprad</h2>
+                <h2 class="subtitle slide-up">- Founder of IKEA</h2>
+                <h2 class="condition slide-up">- ADHD and Dyslexia</h2>
+                <br>
+                <p class="fade-in">When you hear "IKEA", innovation springs to mind. It should therefore come as no surprise that its founder, Ingvar Kamprad, had ADHD and Dyslexia.</p>
+                <p class="fade-in">As IKEA grew, Kamprad struggled with remembering order numbers due to his dyslexia. To overcome this, he used the names of Norwegian people and Swedish islands to remember products. As the names were familiar, he could visualize and memorise his products easily. Kamprad converted the challenges he faced into an iconic market strategy.</p>
+                <button class="know-more-btn slide-up" onclick="window.open('https://en.wikipedia.org/wiki/Ingvar_Kamprad', '_blank')">Know More</button>
+            </div>
+            <div class="data-panel">
+                <h2 class="slide-up">Emma Watson</h2>
+                <h2 class="subtitle slide-up">- Actress</h2>
+                <h2 class="subtitle slide-up">- UN Goodwill Ambassador</h2>
+                <h2 class="condition slide-up">- ADHD</h2>
+                <br>
+                <p class="fade-in">We all know and love her as a remarkable actress who starred in the Harry Potter series. She also scored straight A's during her GCSEs and A-Levels before going on to study English Literature at Oxford University and becoming an advocate for UN Women's HeForShe campaign.</p>
+                <p class="fade-in">What is lesser-known, is that Watson was reportedly medicated throughout the Harry Potter series for ADHD. Too often there is a stigma surrounding medication but for some people, it can offer them the support they need to be the best versions of themselves.</p>
+                <button class="know-more-btn slide-up" onclick="window.open('https://en.wikipedia.org/wiki/Emma_Watson', '_blank')">Know More</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOBILE LAYOUT -->
+    <div class="mobile-layout">
+        <!-- Story 1 -->
+        <div class="mobile-story">
+            <div class="mobile-image-panel">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/BarbaraCorcoran2023.jpg/1280px-BarbaraCorcoran2023.jpg" alt="Barbara Corcoran">
+                <div class="image-caption">Barbara Corcoran - Dyslexia</div>
+            </div>
+            <div class="mobile-data-panel">
+                <h2 class="slide-up">Barbara Corcoran</h2>
+                <h2 class="subtitle slide-up">- Founder of the Corcoran Group</h2>
+                <h2 class="subtitle slide-up">- Shark Tank Investor</h2>
+                <h2 class="condition slide-up">- Dyslexia</h2>
+                <br>
+                <p class="fade-in">We have witnessed her crack great business deals, read her books, watched her interviews and more. But having achieved so much, Corcoran still worries that her dyslexia might make her appear "less smart".</p>
+                <p class="fade-in">Corcoran flunked in school due to dyslexia and had to transfer, only realizing that she was dyslexic when her son was diagnosed. Despite this, she turned a $1000 loan into a $66 million business, using her creative mind to a business advantage.</p>
+                <button class="know-more-btn slide-up" onclick="window.open('https://en.wikipedia.org/wiki/Barbara_Corcoran', '_blank')">Know More</button>
+            </div>
+        </div>
+
+        <!-- Story 2 -->
+        <div class="mobile-story">
+            <div class="mobile-image-panel">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c4/Ingvar_Kamprad_Haparanda_June_2010.jpg" alt="Ingvar Kamprad">
+                <div class="image-caption">Ingvar Kamprad - ADHD & Dyslexia</div>
+            </div>
+            <div class="mobile-data-panel">
+                <h2 class="slide-up">Ingvar Kamprad</h2>
+                <h2 class="subtitle slide-up">- Founder of IKEA</h2>
+                <h2 class="condition slide-up">- ADHD and Dyslexia</h2>
+                <br>
+                <p class="fade-in">When you hear "IKEA", innovation springs to mind. It should therefore come as no surprise that its founder, Ingvar Kamprad, had ADHD and Dyslexia.</p>
+                <p class="fade-in">As IKEA grew, Kamprad struggled with remembering order numbers due to his dyslexia. To overcome this, he used the names of Norwegian people and Swedish islands to remember products. As the names were familiar, he could visualize and memorise his products easily. Kamprad converted the challenges he faced into an iconic market strategy.</p>
+                <button class="know-more-btn slide-up" onclick="window.open('https://en.wikipedia.org/wiki/Ingvar_Kamprad', '_blank')">Know More</button>
+            </div>
+        </div>
+
+        <!-- Story 3 -->
+        <div class="mobile-story">
+            <div class="mobile-image-panel">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/7f/Emma_Watson_2013.jpg" alt="Emma Watson">
+                <div class="image-caption">Emma Watson - ADHD</div>
+            </div>
+            <div class="mobile-data-panel">
+                <h2 class="slide-up">Emma Watson</h2>
+                <h2 class="subtitle slide-up">- Actress</h2>
+                <h2 class="subtitle slide-up">- UN Goodwill Ambassador</h2>
+                <h2 class="condition slide-up">- ADHD</h2>
+                <br>
+                <p class="fade-in">We all know and love her as a remarkable actress who starred in the Harry Potter series. She also scored straight A's during her GCSEs and A-Levels before going on to study English Literature at Oxford University and becoming an advocate for UN Women's HeForShe campaign.</p>
+                <p class="fade-in">What is lesser-known, is that Watson was reportedly medicated throughout the Harry Potter series for ADHD. Too often there is a stigma surrounding medication but for some people, it can offer them the support they need to be the best versions of themselves.</p>
+                <button class="know-more-btn slide-up" onclick="window.open('https://en.wikipedia.org/wiki/Emma_Watson', '_blank')">Know More</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="scroll-indicator" id="scrollIndicator">
+        <div class="indicator-dot active" data-index="0"></div>
+        <div class="indicator-dot" data-index="1"></div>
+        <div class="indicator-dot" data-index="2"></div>
+    </div>
+
+    <script>
+        // Loading animation
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.querySelector('.loader').classList.add('fade-out');
+            }, 1000);
+        });
+
+        // Navbar functionality
+        function toggleMenu() {
+            document.querySelector('.mobile-nav').classList.toggle('show');
+            document.querySelector('.mobile-overlay').classList.toggle('show');
+            document.querySelector('.hamburger').style.display = 
+                document.querySelector('.mobile-nav').classList.contains('show') ? 'none' : 'block';
+            document.querySelector('.close-icon').style.display = 
+                document.querySelector('.mobile-nav').classList.contains('show') ? 'block' : 'none';
+            
+            // Toggle body scroll when menu is open
+            document.body.style.overflow = 
+                document.querySelector('.mobile-nav').classList.contains('show') ? 'hidden' : 'auto';
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                document.querySelector('.navbar').classList.add('scrolled');
+            } else {
+                document.querySelector('.navbar').classList.remove('scrolled');
+            }
+        });
+
+        // Desktop scroll synchronization
+        const imageColumn = document.getElementById('imageColumn');
+        const dataColumn = document.getElementById('dataColumn');
+        const indicatorDots = document.querySelectorAll('.indicator-dot');
+        const dataPanels = document.querySelectorAll('.data-panel');
+        
+        let syncScroll = true;
+        let isScrolling = false;
+        
+        if (imageColumn && dataColumn) {
+            imageColumn.addEventListener('scroll', () => {
+                if (syncScroll) {
+                    syncScroll = false;
+                    dataColumn.scrollTop = imageColumn.scrollTop;
+                    updateActivePanel();
+                    setTimeout(() => syncScroll = true, 100);
+                }
+            });
+            
+            dataColumn.addEventListener('scroll', () => {
+                if (syncScroll) {
+                    syncScroll = false;
+                    imageColumn.scrollTop = dataColumn.scrollTop;
+                    updateActivePanel();
+                    setTimeout(() => syncScroll = true, 100);
+                }
+            });
+        }
+
+        // Update active panel indicator
+        function updateActivePanel() {
+            if (isScrolling || window.innerWidth <= 768) return;
+            
+            const scrollPosition = dataColumn.scrollTop;
+            const panelHeight = window.innerHeight;
+            const activeIndex = Math.round(scrollPosition / panelHeight);
+            
+            // Update indicator dots
+            indicatorDots.forEach((dot, index) => {
+                if (index === activeIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+            
+            // Highlight active data panel
+            dataPanels.forEach((panel, index) => {
+                if (index === activeIndex) {
+                    panel.classList.add('active');
+                } else {
+                    panel.classList.remove('active');
+                }
+            });
+        }
+
+        // Click handler for indicator dots
+        if (indicatorDots.length > 0) {
+            indicatorDots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) return;
+                    
+                    const index = parseInt(this.getAttribute('data-index'));
+                    const panelHeight = window.innerHeight;
+                    
+                    isScrolling = true;
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                    
+                    dataColumn.scrollTo({
+                        top: index * panelHeight,
+                        behavior: 'smooth'
+                    });
+                    
+                    imageColumn.scrollTo({
+                        top: index * panelHeight,
+                        behavior: 'smooth'
+                    });
+                    
+                    setTimeout(() => {
+                        isScrolling = false;
+                    }, 1000);
+                });
+            });
+        }
+
+        // Background Wobble Effect
+        document.addEventListener("mousemove", (event) => {
+            let x = (window.innerWidth / 2 - event.pageX) / 50;
+            let y = (window.innerHeight / 2 - event.pageY) / 50;
+            document.querySelector(".background").style.transform = `translate(${x}px, ${y}px)`;
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.slide-up, .fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Initialize first panel as active for desktop
+        if (dataPanels.length > 0) {
+            dataPanels[0].classList.add('active');
+        }
+    </script>
+</body>
+</html>

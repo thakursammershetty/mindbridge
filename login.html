@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Login</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Product+Sans:wght@400;700&display=swap');
+
+        body {
+            display: flex;
+            margin: 0;
+            font-family: 'Product Sans', sans-serif;
+            height: 100vh;
+        }
+
+        .image-container {
+            flex: 1;
+            background-image: url('https://i.pinimg.com/736x/e5/17/7d/e5177d40d03ca59c51a016f112988bd4.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .login-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            background: rgba(22, 27, 47, 0.7); /* Adjusted opacity */
+            padding-left: 50px;
+            height: 100%; /* Occupy full height */
+        }
+
+        .login-form {
+            width: 300px;
+            padding: 20px;
+            text-align: left;
+        }
+
+        .login-form h2 {
+            color: #d1d9e6;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            color: #d1d9e6;
+            margin-bottom: 8px;
+        }
+
+        .input-group input {
+            width: calc(100% - 22px);
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(30, 37, 63, 0.4);
+            color: #d1d9e6;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .login-btn, .signup-btn, .forgot-password {
+            background: linear-gradient(to right, #6982c2, #49639c);
+            color: #d1d9e6;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            font-size: 16px;
+        }
+
+        .login-btn:hover, .signup-btn:hover {
+            transform: scale(1.05);
+        }
+
+         .login-btn::before, .signup-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%; /* Start from top-left diagonally */
+            left: -50%;
+            width: 200%; /* Make it larger to cover diagonally */
+            height: 200%;
+            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+            transform: rotate(45deg); /* Rotate for diagonal effect */
+        }
+
+        .login-btn:hover::before, .signup-btn:hover::before {
+            left: 100%; /* Move diagonally */
+            top: 100%;
+        }
+
+        .forgot-password {
+            background: none;
+            color: #d1d9e6;
+            border: none;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .forgot-password:hover {
+            color: #9ab3e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="image-container"></div>
+    <div class="login-container">
+        <div class="login-form">
+            <h2>Login</h2>
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username">
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password">
+            </div>
+            <button class="login-btn">Login</button>
+            <button class="signup-btn">Sign Up</button>
+            <button class="forgot-password">Forgot Password?</button>
+        </div>
+    </div>
+    <script>
+    </script>
+</body>
+</html>

@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Mind Bridge</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Product+Sans:ital,wght@0,400;0,700;1,400&display=swap');
+        /* Add OpenDyslexic font */
+        @font-face {
+            font-family: 'OpenDyslexic';
+            src: url('https://dyslexicfonts.com/fonts/OpenDyslexic-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Product Sans', sans-serif;
+            transition: color 0.3s, background-color 0.3s;
+        }
+
+        body {
+            overflow-x: hidden;
+            color: white;
+            text-align: center;
+            background-color: black;
+            transition: background-color 0.5s ease;
+            font-size: 16px; /* Base font size */
+        }
+
+        /* High Contrast Mode */
+        body.high-contrast {
+            background-color: black !important;
+            color: white !important;
+        }
+        body.high-contrast .overlay {
+            background-color: rgba(0, 0, 0, 0.9) !important;
+        }
+        body.high-contrast a {
+            color: yellow !important;
+        }
+        body.high-contrast .submit-btn {
+            background-color: yellow !important;
+            color: black !important;
+            border: 2px solid white !important;
+        }
+        body.high-contrast .contact-card {
+            border: 2px solid white !important;
+        }
+
+        /* Dyslexia Font Mode */
+        body.dyslexia-mode {
+            font-family: 'OpenDyslexic', sans-serif !important;
+            letter-spacing: 1px;
+            line-height: 1.8;
+        }
+
+        .background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: url(./background.jpeg) no-repeat center center/cover;
+            transition: transform 0.1s ease-out, opacity 0.5s ease;
+            z-index: -2;
+        }
+
+        .overlay {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            transition: background-color 0.5s ease;
+            z-index: -1;
+        }
+
+        /* Accessibility Controls - Horizontal Layout */
+        .accessibility-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 15px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .accessibility-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .accessibility-btn:hover {
+            background: rgba(255, 215, 0, 0.3);
+            border-color: #FFD700;
+        }
+
+        /* Updated Frosted Glass Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: auto;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
+            padding: 8px 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 16px;
+            padding: 10px 15px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 20px;
+        }
+
+        .nav-links a:hover {
+            color: #FFD700;
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .nav-links a.active {
+            color: #FFD700;
+            font-weight: bold;
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .hamburger-container, .mobile-nav {
+            display: none;
+        }
+
+        @media (max-width: 1000px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger-container {
+                display: block;
+                position: relative;
+                z-index: 1100;
+                cursor: pointer;
+            }
+
+            .hamburger, .close-icon {
+                width: 32px;
+                height: 32px;
+                fill: white;
+                transition: all 0.3s ease;
+            }
+
+            .close-icon {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+
+            /* Frosted Glass Mobile Nav */
+            .mobile-nav {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 70%;
+                max-width: 300px;
+                height: 100vh;
+                backdrop-filter: blur(15px);
+                background: rgba(0, 0, 0, 0.8);
+                border-right: 1px solid rgba(255, 255, 255, 0.3);
+                padding-top: 80px;
+                transform: translateX(-100%);
+                opacity: 0;
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 1200;
+            }
+
+            .mobile-nav.show {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            .mobile-nav a {
+                font-size: 18px;
+                padding: 18px 25px;
+                text-align: left;
+                color: white;
+                text-decoration: none;
+                display: block;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+                transition: all 0.3s ease;
+            }
+
+            .mobile-nav a:hover {
+                color: #FFD700;
+                background: rgba(255, 215, 0, 0.1);
+                padding-left: 30px;
+            }
+
+            .mobile-nav a.active {
+                color: #FFD700;
+                font-weight: bold;
+                background: rgba(255, 215, 0, 0.1);
+            }
+        }
+
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1100;
+        }
+
+        .mobile-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Contact Page Specific Styles */
+        .contact-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            width: 80%;
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        .contact-title {
+            font-size: 48px;
+            margin-bottom: 30px;
+            color: #FFD700;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .contact-subtitle {
+            font-size: 20px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .contact-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+            text-align: left;
+        }
+
+        .contact-form {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: #FFD700;
+            color: black;
+            border: none;
+            padding: 12px 30px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: #ffa500;
+            transform: translateY(-2px);
+        }
+
+        .contact-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        .contact-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #FFD700;
+        }
+
+        .contact-card p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .contact-card a {
+            color: #FFD700;
+            text-decoration: none;
+            transition: 0.3s ease;
+        }
+
+        .contact-card a:hover {
+            text-decoration: underline;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 24px;
+            transition: 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #FFD700;
+            transform: scale(1.1);
+        }
+
+        /* Typing cursor animation */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .cursor {
+            animation: blink 1s infinite;
+        }
+
+        /* Chatbot Styles */
+        #chatButton {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            padding: 15px 25px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        #chatButton:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        #chatContainer {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: none;
+            flex-direction: column;
+            z-index: 1001;
+        }
+
+        .chat-header {
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #minimizeBtn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+        #chatMessages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #f8f9fa;
+            text-align: left;
+            color: black;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 15px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background-color: #007bff;
+            color: white;
+            margin-left: auto;
+        }
+
+        .bot-message {
+            background-color: #e9ecef;
+            color: black;
+            margin-right: auto;
+        }
+
+        #inputGroup {
+            padding: 15px;
+            background-color: white;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #dee2e6;
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        #sendBtn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* Responsive Design for Mobile */
+        @media (max-width: 768px) {
+            .contact-container {
+                width: 90%;
+                top: 60%;
+            }
+
+            .contact-title {
+                font-size: 36px;
+            }
+
+            .contact-subtitle {
+                font-size: 18px;
+            }
+
+            .contact-content {
+                flex-direction: column;
+            }
+
+            .contact-form, .contact-info {
+                width: 100%;
+            }
+
+            #chatButton {
+                width: 60px;
+                height: 60px;
+                padding: 0;
+                font-size: 24px;
+                border-radius: 50%;
+                bottom: 20px;
+            }
+
+            #chatContainer {
+                width: 90%;
+                height: 400px;
+                bottom: 20px;
+                right: 10px;
+            }
+
+            .accessibility-bar {
+                bottom: 100px;
+                left: 50%;
+                transform: translateX(-50%);
+                flex-wrap: wrap;
+                justify-content: center;
+                width: 90%;
+                padding: 8px;
+            }
+            
+            .accessibility-btn {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .contact-title {
+                font-size: 30px;
+            }
+
+            .contact-subtitle {
+                font-size: 16px;
+            }
+
+            .accessibility-bar {
+                bottom: 80px;
+                gap: 5px;
+            }
+            
+            .accessibility-btn {
+                padding: 5px 8px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="overlay"></div>
+
+    <!-- Accessibility Controls - Horizontal Layout -->
+    <div class="accessibility-bar">
+        <button class="accessibility-btn" id="contrastBtn">High Contrast</button>
+        <button class="accessibility-btn" id="dyslexiaBtn">Dyslexia Font</button>
+        <button class="accessibility-btn" id="textSizeBtn">Increase Text</button>
+        <button class="accessibility-btn" id="resetBtn">Reset All</button>
+    </div>
+
+    <nav class="navbar">
+        <div class="logo">Mind Bridge.</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="communityhub.html">Community Hub</a></li>
+            <li><a href="sucessstoreis.html">Success Stories</a></li>
+            <li><a href="jobportal.html">Job Portal</a></li>
+            <li><a href="contactus.html" class="active">Contact Us</a></li>
+        </ul>
+
+        <div class="hamburger-container" onclick="toggleMenu()">
+            <svg class="hamburger" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M4 6h16M4 12h16m-16 6h16" stroke="white" stroke-width="2"/>
+            </svg>
+
+            <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M6 6L18 18M6 18L18 6" stroke="white" stroke-width="2"/>
+            </svg>
+        </div>
+    </nav>
+
+    <ul class="mobile-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="communityhub.html">Community Hub</a></li>
+        <li><a href="sucessstoreis.html">Success Stories</a></li>
+        <li><a href="jobportal.html">Job Portal</a></li>
+        <li><a href="contactus.html" class="active">Contact Us</a></li>
+    </ul>
+
+    <div class="mobile-overlay" onclick="toggleMenu()"></div>
+    
+    <div class="contact-container">
+        <h1 class="contact-title"><span id="typing-text"></span></h1>
+        <p class="contact-subtitle">We'd love to hear from you! Whether you have questions about our services, want to share feedback, or need support, our team is here to help.</p>
+        
+        <div class="contact-content">
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <select id="subject" name="subject">
+                            <option value="general">General Inquiry</option>
+                            <option value="support">Support Request</option>
+                            <option value="feedback">Feedback</option>
+                            <option value="partnership">Partnership Opportunity</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+            
+            <div class="contact-info">
+                <div class="contact-card">
+                    <h3>Get In Touch</h3>
+                    <p><strong>Email:</strong> <a href="mailto:samosa_tintava_sirisha@gmail.com">samosa_tintava_sirisha@gmail.com</a></p>
+                    <p><strong>Phone:</strong> <a href="tel:+18005551234">+91 9182163905</a></p>
+                    <p><strong>Hours:</strong> Monday-Friday, 9am-5pm EST</p>
+                    
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                
+                <div class="contact-card">
+                    <h3>Our Location</h3>
+                    <p><strong>Address:</strong> 123 Neurodiversity Way<br>Andhra Pradesh India</p>
+                    <p>We're happy to meet with you in person by appointment.</p>
+                </div>
+                
+                <div class="contact-card">
+                    <h3>Accessibility Support</h3>
+                    <p>Need help navigating our website or services? Our accessibility team is here to assist.</p>
+                    <p><strong>Email:</strong> <a href="mailto:samosa_tintava_sirisha@gmail.com">samosa_tintava_sirisha@gmail.com</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot HTML -->
+    <button id="chatButton" onclick="toggleChat()"><svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px" fill="#e8eaed"><path d="m240-240-92 92q-19 19-43.5 8.5T80-177v-623q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v200q0 17-11.5 28.5T840-560q-17 0-28.5-11.5T800-600v-200H160v525l46-45h354q17 0 28.5 11.5T600-280q0 17-11.5 28.5T560-240H240Zm520 0h-40q-17 0-28.5-11.5T680-280v-160q0-17 11.5-28.5T720-480h115q16 0 24.5 13.5T862-438l-50 118h39q17 0 26 14t1 29L779-78q-4 7-11.5 5.5T760-82v-158Zm-600-80v-480 480Z"/></svg></button>
+
+    <div id="chatContainer">
+        <div class="chat-header">
+            <span>Neurodiversity Assistant</span>
+            <button id="minimizeBtn" onclick="toggleChat()">−</button>
+        </div>
+        <div id="chatMessages"></div>
+        <div id="inputGroup">
+            <input type="text" id="userInput" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
+            <button id="sendBtn" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <!-- Font Awesome for social icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <script>
+        // Navbar functionality
+        function toggleMenu() {
+            document.querySelector('.mobile-nav').classList.toggle('show');
+            document.querySelector('.mobile-overlay').classList.toggle('show');
+            document.querySelector('.hamburger').style.display = 
+                document.querySelector('.mobile-nav').classList.contains('show') ? 'none' : 'block';
+            document.querySelector('.close-icon').style.display = 
+                document.querySelector('.mobile-nav').classList.contains('show') ? 'block' : 'none';
+            
+            // Toggle body scroll when menu is open
+            document.body.style.overflow = 
+                document.querySelector('.mobile-nav').classList.contains('show') ? 'hidden' : 'auto';
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                document.querySelector('.navbar').classList.add('scrolled');
+            } else {
+                document.querySelector('.navbar').classList.remove('scrolled');
+            }
+        });
+
+        // Background Wobble Effect
+        document.addEventListener("mousemove", (event) => {
+            let x = (window.innerWidth / 2 - event.pageX) / 50;
+            let y = (window.innerHeight / 2 - event.pageY) / 50;
+            document.querySelector(".background").style.transform = `translate(${x}px, ${y}px)`;
+        });
+
+        // Typing Effect for Contact Title
+        document.addEventListener("DOMContentLoaded", function () {
+            const textElement = document.getElementById("typing-text");
+            const text = "Contact Us";
+            let index = 0;
+
+            function typeText() {
+                if (index < text.length) {
+                    textElement.innerHTML = text.substring(0, index + 1) + "<span class='cursor'>|</span>";
+                    index++;
+                    setTimeout(typeText, 100);
+                } else {
+                    document.querySelector(".cursor").style.animation = "blink 1s infinite";
+                }
+            }
+
+            typeText();
+        });
+
+        // Accessibility Features
+        document.getElementById('contrastBtn').addEventListener('click', function() {
+            document.body.classList.toggle('high-contrast');
+            const overlay = document.querySelector('.overlay');
+            overlay.style.backgroundColor = overlay.style.backgroundColor === 'rgba(0, 0, 0, 0.9)' ? 'rgba(0, 0, 0, 0.6)' : 'rgba(0, 0, 0, 0.9)';
+        });
+
+        document.getElementById('dyslexiaBtn').addEventListener('click', function() {
+            document.body.classList.toggle('dyslexia-mode');
+        });
+
+        document.getElementById('textSizeBtn').addEventListener('click', function() {
+            const currentSize = parseFloat(getComputedStyle(document.body).fontSize);
+            document.body.style.fontSize = (currentSize + 2) + 'px';
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            document.body.classList.remove('high-contrast', 'dyslexia-mode');
+            document.body.style.fontSize = '16px';
+            document.querySelector('.overlay').style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+        });
+
+        // Form Submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            this.reset();
+        });
+
+        // Chatbot JavaScript
+        const OPENROUTER_API_KEY = "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";
+        const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+
+        function toggleChat() {
+            const container = document.getElementById('chatContainer');
+            const button = document.getElementById('chatButton');
+            container.style.display = container.style.display === 'none' ? 'flex' : 'none';
+            button.style.display = container.style.display === 'none' ? 'block' : 'none';
+            
+            // Add welcome message when chat is first opened
+            if (container.style.display === 'flex' && document.getElementById('chatMessages').children.length === 0) {
+                appendMessage("Hello! I'm your Neurodiversity Assistant. How can I help you today?", false);
+            }
+        }
+
+        function appendMessage(message, isUser) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            messageDiv.textContent = message.trim();
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const userInput = document.getElementById('userInput');
+            const message = userInput.value.trim();
+
+            if (!message) return;
+
+            appendMessage(message, true);
+            userInput.value = '';
+
+            try {
+                const response = await fetch(OPENROUTER_API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+                        "HTTP-Referer": window.location.href,
+                        "X-Title": "Neurodiversity Chatbot",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "model": "deepseek/deepseek-chat:free",
+                        "messages": [
+                            {
+                                "role": "system",
+                                "content": "You are a helpful assistant specializing in neurodiversity information. Provide supportive, accurate information about autism, ADHD, dyslexia, dyspraxia, and other neurodivergent conditions. Be positive and focus on strengths while acknowledging challenges."
+                            },
+                            {
+                                "role": "user",
+                                "content": message
+                            }
+                        ]
+                    })
+                });
+
+                const data = await response.json();
+                const botResponse = data.choices[0].message.content.trim();
+                appendMessage(botResponse, false);
+            } catch (error) {
+                console.error("Error fetching response from OpenRouter API:", error);
+                appendMessage("Sorry, I encountered an error. Please try again later.", false);
+            }
+        }
+
+        // Allow Enter key to send message
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+        document.getElementById('userInput').addEventListener('keypress', handleKeyPress);
+    </script>
+</body>
+</html>
